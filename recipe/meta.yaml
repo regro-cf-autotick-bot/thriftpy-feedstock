@@ -1,22 +1,18 @@
-{% set name = "thriftpy" %}
 {% set version = "0.3.9" %}
-{% set sha256 = "309e57d97b5bfa01601393ad4f245451e989d6206a59279e56866b264a99796d" %}
 
 package:
-  name: {{ name|lower }}
+  name: thriftpy
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  url: https://pypi.io/packages/source/t/thriftpy/thriftpy-{{ version }}.tar.gz
+  sha256: 309e57d97b5bfa01601393ad4f245451e989d6206a59279e56866b264a99796d
   patches:
     - fix-parse-windows.patch
 
 build:
   number: 1002
-  script: 
-    - python -m pip install --no-deps --ignore-installed .
+  script: {{ PYTHON }} -m pip install . -vv
 
 requirements:
   build:
@@ -45,8 +41,10 @@ test:
     - thriftpy.transport.memory
     # Cython extensions not enabled on windows
     - thriftpy.protocol.cybin  # [not win]
-
+  commands:
+    - pip check
   requires:
+    - pip
     - tornado >=4.0,<5.0
 
 about:
